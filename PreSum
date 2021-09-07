@@ -1,0 +1,58 @@
+
+import org.junit.Test;
+
+import java.util.HashMap;
+
+public class PreSum {
+    public void preSum(int[] nums){
+        int[] sums = new int[nums.length+1];
+        sums[0]=0;
+        for(int i=0;i<nums.length;i++){
+            //[0..i]的sum
+            sums[i+1]=sums[i]+nums[i];
+        }
+    }
+    int subarraySum(int[] nums, int k) {
+        int[] sums = new int[nums.length+1];
+        int ans=0;
+        sums[0]=0;
+        for(int i=0;i<nums.length;i++){
+            //[0..i]的sum
+            sums[i+1]=sums[i]+nums[i];
+        }
+        for(int i=1;i<=nums.length;i++){
+            for(int j=0;j<i;j++){
+                // sum of [j..i-1]
+                if(sums[i]-sums[j]==k){
+                    ans++;
+                }
+            }
+        }
+        return  ans;
+    }
+
+    int subarraySum2(int[] nums, int k) {
+        HashMap<Integer,Integer> map= new HashMap<>();
+        map.put(0,1);
+        int ans=0;
+        int sum_i=0;
+        for(int i=0;i<nums.length;i++){
+            //[0..i]的sum
+            sum_i=sum_i+nums[i];
+            int sum_j= sum_i-k;
+            if(map.containsKey(sum_j)){
+                ans=ans+map.get(sum_j);
+            }
+            map.put(sum_i,map.getOrDefault(sum_i,0)+1);
+        }
+        return ans;
+    }
+    @Test
+    public void test(){
+        int[] nums={1,2,2,3,2};
+        int k=5;
+        System.out.println(subarraySum(nums,k));
+        System.out.println(subarraySum2(nums,k));
+
+    }
+}
